@@ -16,74 +16,32 @@ require("codemirror/addon/edit/continuelist")
 require("codemirror/addon/hint/show-hint")
 require("codemirror/addon/hint/anyword-hint")
 
+CodeMixin = require('../../mixins/code-mixin.coffee')
+Keys = require('../../mixins/keys.coffee')
+
 module.exports = React.createFactory React.createClass
   displayName: "index"
+
+  mixins: [CodeMixin]
 
   getInitialState: ->
     code: localStorage.getItem("markedDownCode") || ""
     fileName: localStorage.getItem("markedDownFileName") || "markedDown"
     keyBinding: localStorage.getItem("markedDownKeyBinding") || "vim"
 
-  updateCode: (updateable) ->
-    @setState code: updateable
-    localStorage.setItem("markedDownCode", updateable)
-    @downloadCode()
-    @downloadHTML()
-
-  downloadCode: ->
-    targetElement = document.getElementById("dlCode")
-    file = new Blob([@state.code], type: "text/plain")
-    targetElement.href = URL.createObjectURL(file)
-    targetElement.download = "#{@state.fileName}.md"
-
-  downloadHTML: ->
-    targetElement = document.getElementById("dlHTML")
-    file = new Blob([marked(@state.code)], type: "text/plain")
-    targetElement.href = URL.createObjectURL(file)
-    targetElement.download = "#{@state.fileName}.html"
-
-  openAttachment: ->
-    fileInput = document.getElementById('openable-file')
-    fileInput.click()
-
-  fileSelected: (inputFile) ->
-    fileInput = document.getElementById('openable-file')
-    f = fileInput.files[0]
-    fr = new FileReader()
-    fr.readAsText(f)
-    fr.onload = (e) =>
-      fileName =  f.name.split('.')
-      localStorage.setItem("markedDownCode", e.target.result)
-      localStorage.setItem("markedDownFileName", fileName[0])
-      @setState {
-        code: e.target.result
-        fileName: fileName[0]
-      }
-
   componentDidUpdate: ->
     @downloadCode()
     @downloadHTML()
+    @downloadHTMLWrapped()
 
   componentDidMount: ->
     $('.dropdown-button').dropdown()
     @downloadCode()
     @downloadHTML()
-
-  vim: ->
-    localStorage.setItem("markedDownKeyBinding", 'vim')
-    @setState keyBinding: 'vim'
-
-  emacs: ->
-    localStorage.setItem("markedDownKeyBinding", 'emacs')
-    @setState keyBinding: 'emacs'
-
-  sublime: ->
-    localStorage.setItem("markedDownKeyBinding", 'sublime')
-    @setState keyBinding: 'sublime'
+    @downloadHTMLWrapped()
 
   render: ->
 
-    bem = new Bemmer(block: 'index')
     options =
       lineNumbers: true
       mode: 'markdown'
@@ -110,6 +68,11 @@ module.exports = React.createFactory React.createClass
               href: ''
               id: 'dlHTML',
                 "HTML"
+          li {},
+            a
+              href: ''
+              id: 'dlHTMLWrapped',
+                "HTML wrapped"
       ul
         id: "code-type-dropdown"
         className: 'dropdown-content',
@@ -153,7 +116,7 @@ module.exports = React.createFactory React.createClass
 
       div className: 'row',
         div className: 'col s12 l6',
-          div className: 'card-panel blue-grey darken-4',
+          div className: 'card-panel blue-grey darken-4 hoverable',
             CodeMirror
               ref: "editor"
               value: @state.code
@@ -161,5 +124,5 @@ module.exports = React.createFactory React.createClass
               options: options
 
         div className: 'col s12 l6',
-          div className: 'card-panel white blue-grey-text text-darken-4',
+          div className: 'card-panel white blue-grey-text text-darken-4 hoverable',
             div dangerouslySetInnerHTML: __html: marked(@state.code)

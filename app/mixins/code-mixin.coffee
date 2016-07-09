@@ -40,9 +40,11 @@ module.exports =
   fileSelected: (inputFile) ->
     fileInput = document.getElementById('openable-file')
     f = fileInput.files[0]
+    console.log f
     fr = new FileReader()
     fr.readAsText(f)
     fr.onload = (e) =>
+      console.log f.name, e.target.result
       fileName =  f.name.split('.')
       localStorage.setItem("markedDownCode", e.target.result)
       localStorage.setItem("markedDownFileName", fileName[0])

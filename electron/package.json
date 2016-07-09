@@ -1,0 +1,29 @@
+{
+  "name": "MarkedDown-Viewer",
+  "productName": "MarkedDown",
+  "version": "0.0.1",
+  "description": "Desktop viewer for MarkedDown",
+  "license": "MIT",
+  "repository": "http://github.com/whatisinternet/marked_down",
+  "author": {
+    "name": "Josh Teeter",
+    "email": "joshteeter@gmail.com",
+    "url": "http://joshteeter.com"
+  },
+  "electronVersion": "1.2.0",
+  "scripts": {
+    "test": "npm test",
+    "start": "electron .",
+    "build": "electron-packager . $npm_package_productName --out=dist --ignore='^/dist$' --prune --asar --all --version=$npm_package_electronVersion"
+  },
+  "files": ["index.js", "index.html"],
+  "dependencies": {
+    "coffee-script": "^1.9.3"
+  },
+  "devDependencies": {
+    "electron-debug": "^1.0.1",
+    "coffee-script": "^1.9.3",
+    "electron-packager": "^7.2.0",
+    "electron-prebuilt": "^1.2.0"
+  }
+}

@@ -1,16 +1,15 @@
 {
   "name": "MarkedDown",
   "version": "0.1.0",
-  "description": "Opinionated CoffeeScript-React-Webpack generator",
+  "description": "A Markdown live preview",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Josh/french-press.git"
+    "url": "https://github.com/whatisinternet/marked_down.git"
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register --recursive --require ./test/setup.coffee",
-    "spec": "mocha 'spec' --compilers coffee:coffee-script/register --recursive",
     "deploy": "NODE_ENV=production webpack -p --config config/application/webpack.production.config.js",
+    "deploy-viewer": "NODE_ENV=production webpack -p --config config/application/webpack.electron.config.js",
     "app": "node ./config/application.js"
   },
   "author": "whatisinternet",

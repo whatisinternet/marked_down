@@ -17,17 +17,20 @@ require("codemirror/addon/hint/show-hint")
 require("codemirror/addon/hint/anyword-hint")
 
 CodeMixin = require('../../mixins/code-mixin.coffee')
+FullScreenMixin = require('../../mixins/fullscreen-mixin.coffee')
 Keys = require('../../mixins/keys.coffee')
 
 module.exports = React.createFactory React.createClass
   displayName: "index"
 
-  mixins: [CodeMixin]
+  mixins: [CodeMixin, FullScreenMixin, Keys]
 
   getInitialState: ->
     code: localStorage.getItem("markedDownCode") || ""
     fileName: localStorage.getItem("markedDownFileName") || "markedDown"
     keyBinding: localStorage.getItem("markedDownKeyBinding") || "vim"
+    leftClass: "s12 l6"
+    rightClass: "s12 l6"
 
   componentDidUpdate: ->
     @downloadCode()
@@ -113,9 +116,17 @@ module.exports = React.createFactory React.createClass
                     className: 'dropdown-button'
                     'data-activates': "code-type-dropdown",
                         "Key bindings"
+            ul
+              id: "nav-mobile"
+              className: "right",
+                li {},
+                  a
+                    onClick: @toggleFullScreen
+                    href: '',
+                      "Toggle Fullscreen"
 
       div className: 'row',
-        div className: 'col s12 l6',
+        div className: "col #{@state.leftClass}",
           div className: 'card-panel blue-grey darken-4 hoverable',
             CodeMirror
               ref: "editor"
@@ -123,6 +134,6 @@ module.exports = React.createFactory React.createClass
               onChange: @updateCode
               options: options
 
-        div className: 'col s12 l6',
+        div className: "col #{@state.rightClass}",
           div className: 'card-panel white blue-grey-text text-darken-4 hoverable',
             div dangerouslySetInnerHTML: __html: marked(@state.code)

@@ -1,32 +1,33 @@
 {div, ul, li, nav, a, input, i}  = React.DOM
 
+config = require('../../../env.coffee')
+
 marked = require('marked')
-Codemirror = require('react-codemirror')
-CodeMirror = React.createFactory(Codemirror)
-require("codemirror/mode/markdown/markdown")
-require("codemirror/mode/xml/xml")
-require("codemirror/theme/material.css")
-require("codemirror/keymap/vim")
-require("codemirror/keymap/emacs")
-require("codemirror/keymap/sublime")
-require("codemirror/addon/edit/closebrackets")
-require("codemirror/addon/edit/matchbrackets")
-require("codemirror/addon/edit/closetag")
-require("codemirror/addon/edit/continuelist")
-require("codemirror/addon/hint/show-hint")
-require("codemirror/addon/hint/anyword-hint")
+
+Firebase = require('firebase')
+Firebase.initializeApp(config)
+
+Keys = require('../../mixins/keys.coffee')
+Code = require('./code.coffee')
+Display = require('./display.coffee')
+Nav = require('../nav/index.coffee')
 
 CodeMixin = require('../../mixins/code-mixin.coffee')
 FullScreenMixin = require('../../mixins/fullscreen-mixin.coffee')
-Keys = require('../../mixins/keys.coffee')
+ReactFireMixin = require('reactfire')
 
 module.exports = React.createFactory React.createClass
   displayName: "index"
 
-  mixins: [CodeMixin, FullScreenMixin, Keys]
+  mixins: [
+    CodeMixin,
+    FullScreenMixin,
+    Keys,
+    ReactFireMixin
+  ]
 
   getInitialState: ->
-    code: localStorage.getItem("markedDownCode") || ""
+    code: localStorage.getItem("markedDownCode") || [""]
     fileName: localStorage.getItem("markedDownFileName") || "markedDown"
     keyBinding: localStorage.getItem("markedDownKeyBinding") || "vim"
     leftClass: "s12 l6"
@@ -43,97 +44,37 @@ module.exports = React.createFactory React.createClass
     @downloadHTML()
     @downloadHTMLWrapped()
 
-  render: ->
+  componentWillMount: ->
+    ref = Firebase.database().ref("code")
+    @bindAsArray(ref, "code")
 
-    options =
-      lineNumbers: true
-      mode: 'markdown'
-      keyMap: @state.keyBinding
-      theme: 'material'
-      autofocus: true
+  componentWillUnmount: ->
+    @unbind('code')
+
+  render: ->
+    code = @state.code[@state.code?.length - 1]?.updateable
+
 
     div {},
-      input
-        type: 'file'
-        id: 'openable-file'
-        style: {display: 'none'}
-        onChange: _.bind(@fileSelected, @),
-      ul
-        id: "export-dropdown"
-        className: 'dropdown-content',
-          li {},
-            a
-              href: ''
-              id: 'dlCode',
-                "Code"
-          li {},
-            a
-              href: ''
-              id: 'dlHTML',
-                "HTML"
-          li {},
-            a
-              href: ''
-              id: 'dlHTMLWrapped',
-                "HTML wrapped"
-      ul
-        id: "code-type-dropdown"
-        className: 'dropdown-content',
-          li {},
-            a
-              href: ''
-              onClick: @vim,
-                "VIM"
-          li {},
-            a
-              href: ''
-              onClick: @emacs,
-                "Emacs"
-          li {},
-            a
-              href: ''
-              onClick: @sublime,
-                "Sublime"
+      Nav
+        fileSelected: @fileSelected
+        vim: @vim
+        emacs: @emacs
+        sublime: @sublime
+        openAttachment: @openAttachment
+        toggleFullScreen: @toggleFullScreen
+        downloadCode: @downloadCode
+        downloadHTML: @downloadHTML
+        downloadHTMLWrapped: @downloadHTMLWrapped
 
-      div className: 'navbar-fixed',
-        nav className: 'grey darken-4',
-          div className: "nav-wrapper",
-            ul
-              id: "nav-mobile"
-              className: "left",
-                li {},
-                  a
-                    onClick: @openAttachment
-                    href: '',
-                      "Open File"
-                li {},
-                  a
-                    className: 'dropdown-button'
-                    'data-activates': "export-dropdown",
-                        "Export"
-                li {},
-                  a
-                    className: 'dropdown-button'
-                    'data-activates': "code-type-dropdown",
-                        "Key bindings"
-            ul
-              id: "nav-mobile"
-              className: "right",
-                li {},
-                  a
-                    onClick: @toggleFullScreen
-                    href: '',
-                      "Toggle Fullscreen"
 
       div className: 'row',
-        div className: "col #{@state.leftClass}",
-          div className: 'card-panel blue-grey darken-4 hoverable',
-            CodeMirror
-              ref: "editor"
-              value: @state.code
-              onChange: @updateCode
-              options: options
+        Code
+          code: code
+          updateCode: @updateCode
+          leftClass: @state.leftClass
+          keyBinding: @state.keyBinding
 
-        div className: "col #{@state.rightClass}",
-          div className: 'card-panel white blue-grey-text text-darken-4 hoverable',
-            div dangerouslySetInnerHTML: __html: marked(@state.code)
+        Display
+          rightClass: @state.rightClass
+          code: code

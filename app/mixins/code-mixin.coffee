@@ -9,7 +9,10 @@ marked.setOptions(
 
 module.exports =
   updateCode: (updateable) ->
-    @setState code: updateable
+    @firebaseRefs.code.push({
+      updateable
+    })
+
     localStorage.setItem("markedDownCode", updateable)
     @downloadCode()
     @downloadHTML()
@@ -17,21 +20,26 @@ module.exports =
 
   downloadCode: ->
     targetElement = document.getElementById("dlCode")
-    file = new Blob([@state.code], type: "text/plain")
+    code = @state.code[@state.code?.length - 1]?.updateable
+    file = new Blob([code], type: "text/plain")
     targetElement.href = URL.createObjectURL(file)
     targetElement.download = "#{@state.fileName}.md"
 
   downloadHTML: ->
     targetElement = document.getElementById("dlHTML")
-    file = new Blob([marked(@state.code)], type: "text/plain")
-    targetElement.href = URL.createObjectURL(file)
-    targetElement.download = "#{@state.fileName}.html"
+    code = @state.code[@state.code?.length - 1]?.updateable
+    if code?
+      file = new Blob([marked(code)], type: "text/plain")
+      targetElement.href = URL.createObjectURL(file)
+      targetElement.download = "#{@state.fileName}.html"
 
   downloadHTMLWrapped: ->
     targetElement = document.getElementById("dlHTMLWrapped")
-    file = new Blob([@wrapHtml(marked(@state.code), @state.fileName)], type: "text/plain")
-    targetElement.href = URL.createObjectURL(file)
-    targetElement.download = "#{@state.fileName}.html"
+    code = @state.code[@state.code?.length - 1]?.updateable
+    if code?
+      file = new Blob([@wrapHtml(marked(code), @state.fileName)], type: "text/plain")
+      targetElement.href = URL.createObjectURL(file)
+      targetElement.download = "#{@state.fileName}.html"
 
   openAttachment: ->
     fileInput = document.getElementById('openable-file')
@@ -48,8 +56,11 @@ module.exports =
       fileName =  f.name.split('.')
       localStorage.setItem("markedDownCode", e.target.result)
       localStorage.setItem("markedDownFileName", fileName[0])
+      result = e.target.result
+      @firebaseRefs.code.push({
+        updateable: result
+      })
       @setState {
-        code: e.target.result
         fileName: fileName[0]
       }
 

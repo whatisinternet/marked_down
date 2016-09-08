@@ -5,6 +5,7 @@ require "codemirror/theme/material.css"
 
 App = require("./application.coffee")
 
+
 document.addEventListener "DOMContentLoaded", (e) ->
   ReactDOM.render(
     App()

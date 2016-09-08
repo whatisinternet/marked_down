@@ -29,6 +29,8 @@ module.exports = React.createFactory React.createClass
             id: "nav-mobile"
             className: "right",
               li {},
+                "Your room code is: #{@props.authCode}"
+              li {},
                 a
                   onClick: @props.toggleFullScreen
                   href: '',

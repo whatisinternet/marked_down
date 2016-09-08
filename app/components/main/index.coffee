@@ -17,7 +17,7 @@ FullScreenMixin = require('../../mixins/fullscreen-mixin.coffee')
 ReactFireMixin = require('reactfire')
 
 module.exports = React.createFactory React.createClass
-  displayName: "index"
+  displayName: "main:app"
 
   mixins: [
     CodeMixin,
@@ -66,6 +66,7 @@ module.exports = React.createFactory React.createClass
         downloadCode: @downloadCode
         downloadHTML: @downloadHTML
         downloadHTMLWrapped: @downloadHTMLWrapped
+        authCode: @props.authCode
 
 
       div className: 'row',

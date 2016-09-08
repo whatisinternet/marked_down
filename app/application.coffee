@@ -12,6 +12,11 @@ module.exports = React.createFactory React.createClass
   render: ->
     @renderCurrentRoute()
 
-  index: ->
-    require('./components/index/index') {}
+  main: (authCode, userName) ->
+    require('./components/main/index')
+      authCode: authCode
+      userName: userName
+
+  login: ->
+    require('./components/login/index') {}
 

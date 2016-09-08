@@ -1,7 +1,7 @@
 ### Marked Down
 ---------------
 
-A live preview markdown editor.
+A live preview markdown editor with firebase integration.
 
 ##### What can I do with it?
 ---------------------------
@@ -25,8 +25,8 @@ to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 * A webbrowser with JavaScript enabled
 
 1. Clone the repo
-2. `npm install`
-3. `npm run app`
+2. `./bin/setup`
+3. `npm run app` or `./bin/start`
 4. [http://localhost:8080](http://localhost:8080)
 
 ##### Deploy
@@ -36,6 +36,12 @@ to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 2. `npm install`
 3. `npm run deploy`
 4. `open dist/index.html`
+
+##### GitHub pages
+------------------
+
+1. Clone the repo
+2. `./bin/gh-pages`
 
 ##### Dev Electron
 ------------------

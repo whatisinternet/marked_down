@@ -1,0 +1,31 @@
+#!/bin/sh
+
+rm ./dist/*.eot
+rm ./dist/*.ttf
+rm ./dist/*.js*
+rm ./dist/*.woff*
+
+npm install
+
+git branch -D gh-pages
+git checkout --quiet --orphan gh-pages
+git status
+
+npm run deploy
+
+rm -r ./assets
+rm -r ./config
+rm -r ./node_modules
+rm -r ./bin
+rm -r ./index.html
+rm -r ./package.json
+rm -r ./README.md
+
+mv dist/* .
+
+rm -r ./dist
+git status
+git add .
+git commit -am ":shipit:"
+
+echo "READY TO DEPLOY"

@@ -2,3 +2,4 @@ node_modules
 build/Release
 *.log
 .redux
+env.coffee

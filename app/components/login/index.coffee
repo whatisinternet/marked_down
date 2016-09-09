@@ -13,7 +13,13 @@ module.exports = React.createFactory React.createClass
 
   newRoute: ->
     date = new Date()
-    window.btoa(date.toISOString)[0..10]
+    window
+      .btoa(
+        _.shuffle(_(JSON.stringify(date
+          .getTime()
+          .toString() + JSON.stringify(@state)
+        ).split()).reverse()).join("")
+      )[0..10]
 
   updateUserName: (e) ->
     userName = e.target.value
@@ -27,6 +33,9 @@ module.exports = React.createFactory React.createClass
   docCode: (e) ->
     docCode = e.target.value
     @setState docCode: docCode
+
+  navigateNewRoute: ->
+    navigate "/#{@newRoute()}/#{@state.userName}"
 
   render: ->
     div {},
@@ -77,7 +86,7 @@ module.exports = React.createFactory React.createClass
                     "Existing Document"
               div className: "col s6",
                 div
-                  onClick: _.partial navigate, "/#{@newRoute()}/#{@state.userName}"
+                  onClick: _.partial @navigateNewRoute
                   style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
                   className: "btn-flat yellow",
                     "New Document"

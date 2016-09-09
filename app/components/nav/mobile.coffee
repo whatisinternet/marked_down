@@ -12,8 +12,7 @@ module.exports = React.createFactory React.createClass
             className: "left",
               li {},
                 a
-                  onClick: @props.openAttachment
-                  href: '',
+                  onClick: @props.openAttachment,
                     "Open File"
               li {},
                 a

@@ -9,10 +9,10 @@ marked.setOptions(
 
 module.exports =
   updateCode: (updateable) ->
-    @firebaseRefs.code.push({
-      updateable
-    })
-
+    @firebaseRefs
+      .code
+      .set(updateable, =>)
+    @setState code: updateable
     localStorage.setItem("markedDownCode", updateable)
     @downloadCode()
     @downloadHTML()
@@ -20,14 +20,14 @@ module.exports =
 
   downloadCode: ->
     targetElement = document.getElementById("dlCode")
-    code = @state.code[@state.code?.length - 1]?.updateable
+    code = @state.code['.value']
     file = new Blob([code], type: "text/plain")
     targetElement.href = URL.createObjectURL(file)
     targetElement.download = "#{@state.fileName}.md"
 
   downloadHTML: ->
     targetElement = document.getElementById("dlHTML")
-    code = @state.code[@state.code?.length - 1]?.updateable
+    code = @state.code['.value']
     if code?
       file = new Blob([marked(code)], type: "text/plain")
       targetElement.href = URL.createObjectURL(file)
@@ -35,7 +35,7 @@ module.exports =
 
   downloadHTMLWrapped: ->
     targetElement = document.getElementById("dlHTMLWrapped")
-    code = @state.code[@state.code?.length - 1]?.updateable
+    code = @state.code['.value']
     if code?
       file = new Blob([@wrapHtml(marked(code), @state.fileName)], type: "text/plain")
       targetElement.href = URL.createObjectURL(file)
@@ -57,9 +57,10 @@ module.exports =
       localStorage.setItem("markedDownCode", e.target.result)
       localStorage.setItem("markedDownFileName", fileName[0])
       result = e.target.result
-      @firebaseRefs.code.push({
-        updateable: result
-      })
+      console.log result
+      @firebaseRefs
+        .code
+        .set(e.target.result, =>)
       @setState {
         fileName: fileName[0]
       }

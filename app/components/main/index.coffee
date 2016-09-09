@@ -45,14 +45,14 @@ module.exports = React.createFactory React.createClass
     @downloadHTMLWrapped()
 
   componentWillMount: ->
-    ref = Firebase.database().ref("code")
-    @bindAsArray(ref, "code")
+    ref = Firebase.database().ref().child("documents/#{@props.authCode}")
+    @bindAsObject(ref, "code")
 
   componentWillUnmount: ->
     @unbind('code')
 
   render: ->
-    code = @state.code[@state.code?.length - 1]?.updateable
+    code = @state.code['.value']
 
 
     div {},

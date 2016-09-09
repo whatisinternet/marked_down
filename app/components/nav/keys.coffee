@@ -9,16 +9,13 @@ module.exports = React.createFactory React.createClass
       className: 'dropdown-content',
         li {},
           a
-            href: ''
             onClick: @props.vim,
               "VIM"
         li {},
           a
-            href: ''
             onClick: @props.emacs,
               "Emacs"
         li {},
           a
-            href: ''
             onClick: @props.sublime,
               "Sublime"

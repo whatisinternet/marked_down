@@ -15,16 +15,13 @@ module.exports = React.createFactory React.createClass
         className: 'dropdown-content',
           li {},
             a
-              href: ''
               id: 'dlCode',
                 "Code"
           li {},
             a
-              href: ''
               id: 'dlHTML',
                 "HTML"
           li {},
             a
-              href: ''
               id: 'dlHTMLWrapped',
                 "HTML wrapped"

@@ -3,3 +3,6 @@ build/Release
 *.log
 .redux
 env.coffee
+.firebaserc
+database.rules.json
+firebase.json

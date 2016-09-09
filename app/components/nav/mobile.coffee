@@ -31,6 +31,5 @@ module.exports = React.createFactory React.createClass
                 "Your room code is: #{@props.authCode}"
               li {},
                 a
-                  onClick: @props.toggleFullScreen
-                  href: '',
+                  onClick: @props.toggleFullScreen,
                     "Toggle Fullscreen"

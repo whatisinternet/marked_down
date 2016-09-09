@@ -13,7 +13,6 @@ module.exports =
       .code
       .set(updateable, =>)
     @setState code: updateable
-    localStorage.setItem("markedDownCode", updateable)
     @downloadCode()
     @downloadHTML()
     @downloadHTMLWrapped()
@@ -54,7 +53,6 @@ module.exports =
     fr.onload = (e) =>
       console.log f.name, e.target.result
       fileName =  f.name.split('.')
-      localStorage.setItem("markedDownCode", e.target.result)
       localStorage.setItem("markedDownFileName", fileName[0])
       result = e.target.result
       console.log result

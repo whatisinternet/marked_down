@@ -27,7 +27,7 @@ module.exports = React.createFactory React.createClass
   ]
 
   getInitialState: ->
-    code: localStorage.getItem("markedDownCode") || [""]
+    code: ""
     fileName: localStorage.getItem("markedDownFileName") || "markedDown"
     keyBinding: localStorage.getItem("markedDownKeyBinding") || "vim"
     leftClass: "s12 l6"
@@ -52,7 +52,7 @@ module.exports = React.createFactory React.createClass
     @unbind('code')
 
   render: ->
-    code = @state.code['.value']
+    code = if @state.code['.value']? then @state.code['.value'] else @state.code
 
 
     div {},

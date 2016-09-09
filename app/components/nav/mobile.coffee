@@ -24,6 +24,10 @@ module.exports = React.createFactory React.createClass
                   className: 'dropdown-button'
                   'data-activates': "code-type-dropdown",
                       "Key bindings"
+              li {},
+                a
+                  href: "",
+                    "Change rooms"
           ul
             id: "nav-mobile"
             className: "right",

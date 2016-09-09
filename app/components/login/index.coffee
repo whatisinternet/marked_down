@@ -1,6 +1,7 @@
 {div, input, label, h1}  = React.DOM
 
 navigate = require('react-mini-router').navigate
+uuid = require('uuid-v4')
 
 module.exports = React.createFactory React.createClass
   displayName: "login"
@@ -15,10 +16,7 @@ module.exports = React.createFactory React.createClass
     date = new Date()
     window
       .btoa(
-        _.shuffle(_(JSON.stringify(date
-          .getTime()
-          .toString() + JSON.stringify(@state)
-        ).split()).reverse()).join("")
+        uuid() + uuid()
       )[0..10]
 
   updateUserName: (e) ->

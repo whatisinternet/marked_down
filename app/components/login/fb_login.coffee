@@ -6,7 +6,7 @@ module.exports = React.createFactory React.createClass
   displayName: "fb::login"
 
   getInitialState: ->
-    loggedIn: !!@props.firebase.auth().currentUser
+    loggedIn: @props.loggedIn
 
   componentWillMount: ->
     firebase.auth().onAuthStateChanged((user) =>

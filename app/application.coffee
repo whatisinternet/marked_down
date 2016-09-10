@@ -11,22 +11,28 @@ module.exports = React.createFactory React.createClass
   displayName: "App"
 
   getInitialState: ->
-    loggedIn: !!Firebase.auth().currentUser
+    loggedIn: !(localStorage.getItem("doc") == "")
 
-  setLoginState: ->
-    @setState loggedIn: !@state.loggedIn
+  setLoginState: (state = @state.loggedIn) ->
+    @setState loggedIn: !state
 
   logout: ->
-    localStorage.setItem( "doc", "")
+    localStorage.setItem("doc", "")
     Firebase.auth().signOut()
-    @setLoginState()
+    @setLoginState(true)
 
   mixins: [RouterMixin]
 
   routes: require('../config/routes')
 
   render: ->
-    @renderCurrentRoute()
+    if @state.loggedIn
+      @renderCurrentRoute()
+    else
+      require('./components/login/fb_login')
+        firebase: Firebase
+        setLoginState: @setLoginState
+        loggedIn: @state.loggedIn
 
   main: (authCode, user) ->
     if @state.loggedIn
@@ -36,15 +42,14 @@ module.exports = React.createFactory React.createClass
         firebase: Firebase
         logout: @logout
     else
-      navigate("/", false)
-      require('./components/login/fb_login')
-        firebase: Firebase
-        setLoginState: @setLoginState
+      navigate("/", true)
+      div {}
 
   login: ->
     require('./components/login/fb_login')
       firebase: Firebase
       setLoginState: @setLoginState
+      loggedIn: @state.loggedIn
 
   setup: (user) ->
     if @state.loggedIn
@@ -53,7 +58,5 @@ module.exports = React.createFactory React.createClass
         user: JSON.parse(atob(user))
         logout: @logout
     else
-      navigate("/", false)
-      require('./components/login/fb_login')
-        firebase: Firebase
-        setLoginState: @setLoginState
+      navigate("/", true)
+      div {}

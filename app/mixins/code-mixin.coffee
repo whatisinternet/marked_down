@@ -9,10 +9,25 @@ marked.setOptions(
 
 module.exports =
   updateCode: (updateable) ->
-    @firebaseRefs
-      .code
-      .set(updateable, =>)
-    @setState code: updateable
+    users = @state.code.users
+    if users?
+      @firebaseRefs
+        .code
+        .update(
+          document: updateable
+          users: _.uniq users.concat(@props.user.uid)
+          updated_at: (new Date()).toISOString()
+          created_at: @state.code.created_at || (new Date()).toISOString()
+          , =>)
+    else
+      @firebaseRefs
+        .code
+        .update(
+          document: updateable
+          users: [@props.user.uid]
+          updated_at: (new Date()).toISOString()
+          created_at: @state.code.created_at || (new Date()).toISOString()
+          , =>)
     @downloadCode()
     @downloadHTML()
     @downloadHTMLWrapped()
@@ -58,7 +73,10 @@ module.exports =
       console.log result
       @firebaseRefs
         .code
-        .set(e.target.result, =>)
+        .update(
+          document: e.target.result
+          updated_at: (new Date()).toISOString()
+          , =>)
       @setState {
         fileName: fileName[0]
       }

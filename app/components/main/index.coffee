@@ -22,11 +22,16 @@ module.exports = React.createFactory React.createClass
   ]
 
   getInitialState: ->
-    code: ""
+    code:
+      document: ""
+      users: []
+      created_at: (new Date()).toISOString()
+      updated_at: (new Date()).toISOString()
     fileName: localStorage.getItem("markedDownFileName") || "markedDown"
     keyBinding: localStorage.getItem("markedDownKeyBinding") || "vim"
     leftClass: "s12 l6"
     rightClass: "s12 l6"
+    users: []
 
   componentDidUpdate: ->
     @downloadCode()
@@ -40,19 +45,27 @@ module.exports = React.createFactory React.createClass
     @downloadHTMLWrapped()
 
   componentWillMount: ->
-    ref = @props.firebase.database().ref().child("documents/#{@props.authCode}")
+    ref = @props
+      .firebase
+      .database()
+      .ref()
+      .child("documents/#{@props.authCode}")
     @bindAsObject(ref, "code")
-    @firebaseRefs
-      .code
-      .set("", =>)
+    new_document = @state.code['.value']?
+    if new_document
+      @firebaseRefs
+        .code
+        .update(
+          document: ""
+          created_at: (new Date()).toISOString()
+          , =>)
 
   componentWillUnmount: ->
     try
       @unbind('code')
 
   render: ->
-    code = if @state.code['.value']? then @state.code['.value'] else @state.code
-    code = "" if code['.value'] == null
+    code = @state.code.document
 
     div {},
       Nav

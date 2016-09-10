@@ -19,4 +19,6 @@ module.exports = React.createFactory React.createClass
         openAttachment: @props.openAttachment
         toggleFullScreen: @props.toggleFullScreen
         authCode: @props.authCode
+        logout: @props.logout
+        userName: @props.userName
 

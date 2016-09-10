@@ -7,9 +7,9 @@ module.exports = React.createFactory React.createClass
   displayName: "login"
 
   getInitialState: ->
-    userName: ""
+    userName: @props.userName
     newDocument: true
-    documentEnabled: false
+    documentEnabled: true
     docCode: ""
 
   newRoute: ->
@@ -18,12 +18,6 @@ module.exports = React.createFactory React.createClass
       .btoa(
         uuid() + uuid()
       )[0..10]
-
-  updateUserName: (e) ->
-    userName = e.target.value
-    @setState
-      userName: userName
-      documentEnabled: if userName.length > 0 then true else false
 
   existingDocument: ->
     @setState newDocument: !@state.newDocument
@@ -43,15 +37,6 @@ module.exports = React.createFactory React.createClass
       div className: "row",
         div className: "col m8 l6 s12 offset-m2 offset-l3",
           div className: "card-panel blue-grey darken-4 white-text",
-            div className: "row",
-              div className: "input-field",
-                input
-                  onKeyUp: @updateUserName
-                  type: "text"
-                  id: "userName"
-                label
-                  htmlFor: "userName",
-                    "User name"
             div
               className: "row"
               style: if @state.newDocument then {display: "none"} else {display: ""},

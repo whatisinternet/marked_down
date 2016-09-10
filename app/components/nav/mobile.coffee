@@ -1,5 +1,7 @@
 {div, ul, li, nav, a, input, i}  = React.DOM
 
+navigate = require('react-mini-router').navigate
+
 module.exports = React.createFactory React.createClass
   displayName: "nav::mobile"
 
@@ -26,8 +28,8 @@ module.exports = React.createFactory React.createClass
                       "Key bindings"
               li {},
                 a
-                  href: "",
-                    "Change rooms"
+                  onClick: @props.logout,
+                    "Logout"
           ul
             id: "nav-mobile"
             className: "right",

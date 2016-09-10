@@ -1,11 +1,6 @@
 {div, ul, li, nav, a, input, i}  = React.DOM
 
-config = require('../../../env.coffee')
-
 marked = require('marked')
-
-Firebase = require('firebase')
-Firebase.initializeApp(config)
 
 Keys = require('../../mixins/keys.coffee')
 Code = require('./code.coffee')
@@ -45,7 +40,7 @@ module.exports = React.createFactory React.createClass
     @downloadHTMLWrapped()
 
   componentWillMount: ->
-    ref = Firebase.database().ref().child("documents/#{@props.authCode}")
+    ref = @props.firebase.database().ref().child("documents/#{@props.authCode}")
     @bindAsObject(ref, "code")
 
   componentWillUnmount: ->
@@ -53,7 +48,7 @@ module.exports = React.createFactory React.createClass
 
   render: ->
     code = if @state.code['.value']? then @state.code['.value'] else @state.code
-
+    code = "" if code['.value'] == null
 
     div {},
       Nav
@@ -67,15 +62,17 @@ module.exports = React.createFactory React.createClass
         downloadHTML: @downloadHTML
         downloadHTMLWrapped: @downloadHTMLWrapped
         authCode: @props.authCode
+        logout: @props.logout
+        userName: @props.userName
 
 
       div className: 'row',
         Code
-          code: code
+          code: code || ""
           updateCode: @updateCode
           leftClass: @state.leftClass
           keyBinding: @state.keyBinding
 
         Display
           rightClass: @state.rightClass
-          code: code
+          code: code || ""

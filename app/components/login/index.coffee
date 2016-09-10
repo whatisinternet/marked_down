@@ -1,7 +1,8 @@
-{div, input, label, h1}  = React.DOM
+{div, input, label, h5, table, thead, tbody, tr, th, td, a}  = React.DOM
 
 navigate = require('react-mini-router').navigate
 uuid = require('uuid-v4')
+moment = require('moment')
 
 module.exports = React.createFactory React.createClass
   displayName: "login"
@@ -11,6 +12,27 @@ module.exports = React.createFactory React.createClass
     newDocument: true
     documentEnabled: true
     docCode: ""
+    projects: []
+
+  componentWillMount: ->
+    @userDocuments()
+
+  userDocuments: ->
+    ref = @props
+      .firebase
+      .database()
+      .ref("documents")
+      .on('value', (snapshot) =>
+        if @state.projects.length == 0
+          documents = snapshot.val()
+          keys = _.keys documents
+          selection = _.select keys, (key) =>
+            _.includes documents[key].users, @props.user.uid
+          projects = _.reduce selection, ((accum, selected) =>
+            accum.concat(_.extend documents[selected], {key: selected})
+          ), []
+          @setState projects: _.sortBy projects, 'updated_at', 'desc'
+      )
 
   newRoute: ->
     date = new Date()
@@ -42,17 +64,39 @@ module.exports = React.createFactory React.createClass
         height: "100vh",
       div className: "row center-align white-text",
         div className: "row",
-          div
-            className: "row"
-            style: if @state.newDocument then {display: "none"} else {display: ""},
-            div className: "input-field",
-              input
-                onKeyUp: @docCode
-                type: "text"
-                id: "docCode"
-              label
-                htmlFor: "docCode",
-                  "Room code"
+          if !@state.newDocument
+            div {},
+              h5 {},
+                "Please select a room or enter a room code you have been given"
+              div
+                className: "row",
+                  table {},
+                    thead {},
+                      tr {},
+                        th {},
+                          "Room Code"
+                        th {},
+                          "Date updated"
+                    tbody {},
+                      _.map @state.projects, (project) =>
+                        tr key: project.key,
+                          td
+                            className: "white-text"
+                            style: cursor: "pointer"
+                            onClick: _.partial(navigate, "/#{project.key}/#{@state.user}"),
+                              "Room: #{project.key}"
+                          td {},
+                            moment(project.updated_at).fromNow()
+              div
+                className: "row",
+                div className: "input-field",
+                  input
+                    onKeyUp: @docCode
+                    type: "text"
+                    id: "docCode"
+                  label
+                    htmlFor: "docCode",
+                      "Room code"
           div className: "row",
             div className: "col s6",
               div

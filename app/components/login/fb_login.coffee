@@ -32,14 +32,24 @@ module.exports = React.createFactory React.createClass
       @props.setLoginState()
 
   render: ->
-    div className: 'row',
-      if @state.loggedIn
-        div
-          onClick: @logout
-          className: 'btn',
-          "Logout"
-      else
-        div
-          onClick: @login
-          className: 'btn',
-          "Login"
+    div
+      style:
+        display: "flex"
+        flexDirection: "column"
+        alignItems: "center"
+        justifyContent: "center"
+        height: "100vh",
+      div className: "row center-align white-text",
+        div className: "white-text",
+          div
+            className: "row center-align",
+              if @state.loggedIn
+                div
+                  onClick: @logout
+                  className: 'btn',
+                  "Logout"
+              else
+                div
+                  onClick: @login
+                  className: 'btn red accent-2',
+                  "Login with google"

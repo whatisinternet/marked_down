@@ -33,7 +33,7 @@ module.exports = React.createFactory React.createClass
     div {},
       div className: "row center-align white-text",
         h1 {},
-          "Please login"
+          "Please select a document type"
       div className: "row",
         div className: "col m8 l6 s12 offset-m2 offset-l3",
           div className: "card-panel blue-grey darken-4 white-text",
@@ -61,15 +61,21 @@ module.exports = React.createFactory React.createClass
                   style: if @state.newDocument then {display: "none"} else {display: ""}
                   className: "btn-flat yellow",
                     "Cancel"
-              div className: "col s6",
-                div
-                  onClick: _.partial @existingDocument
-                  style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
-                  className: "btn-flat blue accent-2",
-                    "Existing Document"
-              div className: "col s6",
-                div
-                  onClick: _.partial @navigateNewRoute
-                  style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
-                  className: "btn-flat yellow",
-                    "New Document"
+              if @state.newDocument && @state.documentEnabled
+                div {},
+                  div
+                    className: "row center-align",
+                    div className: "col s12",
+                      div
+                        onClick: _.partial @existingDocument
+                        style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
+                        className: "btn-flat blue accent-2",
+                          "Existing Document"
+                  div
+                    className: "row center-align",
+                    div className: "col s12",
+                      div
+                        onClick: _.partial @navigateNewRoute
+                        style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
+                        className: "btn-flat yellow",
+                          "New Document"

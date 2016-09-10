@@ -63,7 +63,8 @@ module.exports = React.createFactory React.createClass
         downloadHTMLWrapped: @downloadHTMLWrapped
         authCode: @props.authCode
         logout: @props.logout
-        userName: @props.userName
+        user: @props.user
+
 
 
       div className: 'row',

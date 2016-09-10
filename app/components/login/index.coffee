@@ -7,7 +7,7 @@ module.exports = React.createFactory React.createClass
   displayName: "login"
 
   getInitialState: ->
-    userName: @props.userName
+    user: btoa(JSON.stringify(@props.user))
     newDocument: true
     documentEnabled: true
     docCode: ""
@@ -27,55 +27,57 @@ module.exports = React.createFactory React.createClass
     @setState docCode: docCode
 
   navigateNewRoute: ->
-    navigate "/#{@newRoute()}/#{@state.userName}"
+    navigate "/#{@newRoute()}/#{@state.user}"
 
   render: ->
-    div {},
+    div
+      className: "grey darken-3"
+      style:
+        display: "flex"
+        alignItems: "center"
+        justifyContent: "center"
+        height: "100vh",
       div className: "row center-align white-text",
-        h1 {},
-          "Please select a document type"
-      div className: "row",
-        div className: "col m8 l6 s12 offset-m2 offset-l3",
-          div className: "card-panel blue-grey darken-4 white-text",
-            div
-              className: "row"
-              style: if @state.newDocument then {display: "none"} else {display: ""},
-              div className: "input-field",
-                input
-                  onKeyUp: @docCode
-                  type: "text"
-                  id: "docCode"
-                label
-                  htmlFor: "docCode",
-                    "Room code"
-            div className: "row",
-              div className: "col s6",
+        div className: "row",
+          div
+            className: "row"
+            style: if @state.newDocument then {display: "none"} else {display: ""},
+            div className: "input-field",
+              input
+                onKeyUp: @docCode
+                type: "text"
+                id: "docCode"
+              label
+                htmlFor: "docCode",
+                  "Room code"
+          div className: "row",
+            div className: "col s6",
+              div
+                onClick: _.partial navigate, "/#{@state.docCode}/#{@state.user}"
+                style: if @state.newDocument || !@state.documentEnabled then {display: "none"} else {display: ""}
+                className: "btn-flat yellow",
+                  "Open"
+            div className: "col s6",
+              div
+                onClick: _.partial @existingDocument
+                style: if @state.newDocument then {display: "none"} else {display: ""}
+                className: "btn-flat yellow",
+                  "Cancel"
+            if @state.newDocument && @state.documentEnabled
+              div {},
                 div
-                  onClick: _.partial navigate, "/#{@state.docCode}/#{@state.userName}"
-                  style: if @state.newDocument || !@state.documentEnabled then {display: "none"} else {display: ""}
-                  className: "btn-flat yellow",
-                    "Open Document"
-              div className: "col s6",
+                  className: "row center-align",
+                  div className: "col s12",
+                    div
+                      onClick: _.partial @navigateNewRoute
+                      style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
+                      className: "btn-flat yellow",
+                        "New Document"
                 div
-                  onClick: _.partial @existingDocument
-                  style: if @state.newDocument then {display: "none"} else {display: ""}
-                  className: "btn-flat yellow",
-                    "Cancel"
-              if @state.newDocument && @state.documentEnabled
-                div {},
-                  div
-                    className: "row center-align",
-                    div className: "col s12",
-                      div
-                        onClick: _.partial @existingDocument
-                        style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
-                        className: "btn-flat blue accent-2",
-                          "Existing Document"
-                  div
-                    className: "row center-align",
-                    div className: "col s12",
-                      div
-                        onClick: _.partial @navigateNewRoute
-                        style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
-                        className: "btn-flat yellow",
-                          "New Document"
+                  className: "row center-align",
+                  div className: "col s12",
+                    div
+                      onClick: _.partial @existingDocument
+                      style: if @state.newDocument && @state.documentEnabled then {display: ""} else {display: "none"}
+                      className: "btn-flat yellow accent-2",
+                        "Existing Document"

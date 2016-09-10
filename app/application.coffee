@@ -28,11 +28,11 @@ module.exports = React.createFactory React.createClass
   render: ->
     @renderCurrentRoute()
 
-  main: (authCode, userName) ->
+  main: (authCode, user) ->
     if @state.loggedIn
       require('./components/main/index')
         authCode: authCode
-        userName: userName
+        user: JSON.parse(atob(user))
         firebase: Firebase
         logout: @logout
     else
@@ -46,11 +46,11 @@ module.exports = React.createFactory React.createClass
       firebase: Firebase
       setLoginState: @setLoginState
 
-  setup: (userName) ->
+  setup: (user) ->
     if @state.loggedIn
       require('./components/login/index')
         firebase: Firebase
-        userName: userName
+        user: JSON.parse(atob(user))
         logout: @logout
     else
       navigate("/", false)

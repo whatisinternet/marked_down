@@ -16,7 +16,7 @@ module.exports = React.createFactory React.createClass
       .then((result) =>
         token = result.credential.accessToken
         user = result.user
-        navigate "/#{user.displayName}"
+        navigate "/#{btoa(JSON.stringify(user))}"
 
         @setState loggedIn: true
         @props.setLoginState()
@@ -33,6 +33,7 @@ module.exports = React.createFactory React.createClass
 
   render: ->
     div
+      className: "grey darken-4"
       style:
         display: "flex"
         flexDirection: "column"

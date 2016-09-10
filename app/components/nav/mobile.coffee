@@ -1,4 +1,4 @@
-{div, ul, li, nav, a, input, i}  = React.DOM
+{div, ul, li, nav, a, input, i, img}  = React.DOM
 
 navigate = require('react-mini-router').navigate
 
@@ -6,6 +6,7 @@ module.exports = React.createFactory React.createClass
   displayName: "nav::mobile"
 
   render: ->
+    console.log @props.user
     div className: 'navbar-fixed',
       nav className: 'grey darken-4',
         div className: "nav-wrapper",
@@ -26,10 +27,6 @@ module.exports = React.createFactory React.createClass
                   className: 'dropdown-button'
                   'data-activates': "code-type-dropdown",
                       "Key bindings"
-              li {},
-                a
-                  onClick: @props.logout,
-                    "Logout"
           ul
             id: "nav-mobile"
             className: "right",
@@ -37,5 +34,9 @@ module.exports = React.createFactory React.createClass
                 "Your room code is: #{@props.authCode}"
               li {},
                 a
-                  onClick: @props.toggleFullScreen,
-                    "Toggle Fullscreen"
+                  className: 'dropdown-button'
+                  'data-activates': "user-dropdown",
+                    img
+                      className: "circle responsive-img"
+                      style: width: '30px', paddingTop: '15px'
+                      src: @props.user.photoURL

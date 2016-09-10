@@ -24,10 +24,13 @@ module.exports = React.createFactory React.createClass
 
   docCode: (e) ->
     docCode = e.target.value
+    localStorage.setItem( "doc", docCode)
     @setState docCode: docCode
 
   navigateNewRoute: ->
-    navigate "/#{@newRoute()}/#{@state.user}"
+    roomCode = @newRoute()
+    localStorage.setItem( "doc", roomCode )
+    navigate "/#{roomCode}/#{@state.user}"
 
   render: ->
     div

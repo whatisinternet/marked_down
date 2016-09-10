@@ -6,7 +6,6 @@ module.exports = React.createFactory React.createClass
   displayName: "nav::mobile"
 
   render: ->
-    console.log @props.user
     div className: 'navbar-fixed',
       nav className: 'grey darken-4',
         div className: "nav-wrapper",

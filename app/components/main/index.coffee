@@ -42,9 +42,13 @@ module.exports = React.createFactory React.createClass
   componentWillMount: ->
     ref = @props.firebase.database().ref().child("documents/#{@props.authCode}")
     @bindAsObject(ref, "code")
+    @firebaseRefs
+      .code
+      .set("", =>)
 
   componentWillUnmount: ->
-    @unbind('code')
+    try
+      @unbind('code')
 
   render: ->
     code = if @state.code['.value']? then @state.code['.value'] else @state.code

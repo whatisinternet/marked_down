@@ -17,7 +17,7 @@ module.exports = React.createFactory React.createClass
     @setState loggedIn: !@state.loggedIn
 
   logout: ->
-    console.log "logout"
+    localStorage.setItem( "doc", "")
     Firebase.auth().signOut()
     @setLoginState()
 

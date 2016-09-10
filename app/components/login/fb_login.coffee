@@ -8,11 +8,26 @@ module.exports = React.createFactory React.createClass
   getInitialState: ->
     loggedIn: !!@props.firebase.auth().currentUser
 
-  #TODO REDUX this
+  componentWillMount: ->
+    firebase.auth().onAuthStateChanged((user) =>
+      docCode = localStorage.getItem( "doc" )
+      if user
+        @setState loggedIn: true
+        @props.setLoginState()
+
+        if docCode? && docCode != ""
+          navigate "/#{docCode}/#{btoa(JSON.stringify(user))}"
+        else
+          navigate "/#{btoa(JSON.stringify(user))}"
+    )
+
   login: ->
     provider = new @props.firebase.auth.GoogleAuthProvider();
     provider.addScope("https://www.googleapis.com/auth/plus.login")
-    @props.firebase.auth().signInWithPopup(provider)
+    @props
+      .firebase
+      .auth()
+      .signInWithPopup(provider)
       .then((result) =>
         token = result.credential.accessToken
         user = result.user

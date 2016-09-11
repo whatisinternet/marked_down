@@ -13,6 +13,7 @@ module.exports = React.createFactory React.createClass
         height: '30px'
         backgroundColor: 'rgba(0,0,0,0.6)'
         borderRadius: '5px'
+        display: 'flex'
       className: 'white-text',
         _.map @props.active_users, (user) ->
           div

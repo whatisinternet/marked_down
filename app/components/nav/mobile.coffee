@@ -1,6 +1,7 @@
 {div, ul, li, nav, a, input, i, img}  = React.DOM
 
 navigate = require('react-mini-router').navigate
+Users = require("./users.coffee")
 
 module.exports = React.createFactory React.createClass
   displayName: "nav::mobile"
@@ -26,6 +27,8 @@ module.exports = React.createFactory React.createClass
                   className: 'dropdown-button'
                   'data-activates': "code-type-dropdown",
                       "Key bindings"
+          Users
+            active_users: @props.active_users
           ul
             id: "nav-mobile"
             className: "right",

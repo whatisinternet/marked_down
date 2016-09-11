@@ -8,26 +8,17 @@ marked.setOptions(
 )
 
 module.exports =
+
+  slimUser: ->
+    user = @props.user
+    {
+      uid: user.uid
+      email: user.email
+      photo: user.photoURL
+    }
+
   updateCode: (updateable) ->
-    users = @state.code.users
-    if users?
-      @firebaseRefs
-        .code
-        .update(
-          document: updateable
-          users: _.uniq users.concat(@props.user.uid)
-          updated_at: (new Date()).toISOString()
-          created_at: @state.code.created_at || (new Date()).toISOString()
-          , =>)
-    else
-      @firebaseRefs
-        .code
-        .update(
-          document: updateable
-          users: [@props.user.uid]
-          updated_at: (new Date()).toISOString()
-          created_at: @state.code.created_at || (new Date()).toISOString()
-          , =>)
+    @updateFirebase(updateable)
     @downloadCode()
     @downloadHTML()
     @downloadHTMLWrapped()
@@ -59,24 +50,40 @@ module.exports =
     fileInput = document.getElementById('openable-file')
     fileInput.click()
 
-  fileSelected: (inputFile) ->
-    fileInput = document.getElementById('openable-file')
-    f = fileInput.files[0]
-    console.log f
-    fr = new FileReader()
-    fr.readAsText(f)
-    fr.onload = (e) =>
-      console.log f.name, e.target.result
-      fileName =  f.name.split('.')
-      localStorage.setItem("markedDownFileName", fileName[0])
-      result = e.target.result
-      console.log result
+  updateFirebase: (code) ->
+    users = @state.code.users
+    active_users = @state.code.active_users || []
+    if users?
       @firebaseRefs
         .code
         .update(
-          document: e.target.result
+          document: code
+          users: _.uniq users.concat(@props.user.uid)
+          active_users: _.uniq active_users.concat(@slimUser()), 'uid'
           updated_at: (new Date()).toISOString()
+          created_at: @state.code.created_at || (new Date()).toISOString()
           , =>)
+    else
+      @firebaseRefs
+        .code
+        .update(
+          document: code
+          users: [@props.user.uid]
+          active_users: [@slimUser()]
+          updated_at: (new Date()).toISOString()
+          created_at: @state.code.created_at || (new Date()).toISOString()
+          , =>)
+
+
+  fileSelected: (inputFile) ->
+    fileInput = document.getElementById('openable-file')
+    f = fileInput.files[0]
+    fr = new FileReader()
+    fr.readAsText(f)
+    fr.onload = (e) =>
+      fileName =  f.name.split('.')
+      localStorage.setItem("markedDownFileName", fileName[0])
+      @updateFirebase(e.target.result)
       @setState {
         fileName: fileName[0]
       }

@@ -21,10 +21,12 @@ module.exports = React.createFactory React.createClass
         toggleFullScreen: @props.toggleFullScreen
         user: @props.user
         logout: @props.logout
+        changeRooms: @props.changeRooms
       Mobile
         openAttachment: @props.openAttachment
         toggleFullScreen: @props.toggleFullScreen
         authCode: @props.authCode
         logout: @props.logout
         user: @props.user
+        active_users: @props.active_users
 

@@ -1,6 +1,7 @@
 {div, ul, li, nav, a, input, i}  = React.DOM
 
 marked = require('marked')
+navigate = require('react-mini-router').navigate
 
 Keys = require('../../mixins/keys.coffee')
 Code = require('./code.coffee')
@@ -25,6 +26,7 @@ module.exports = React.createFactory React.createClass
     code:
       document: ""
       users: []
+      active_users: []
       created_at: (new Date()).toISOString()
       updated_at: (new Date()).toISOString()
     fileName: localStorage.getItem("markedDownFileName") || "markedDown"
@@ -44,6 +46,31 @@ module.exports = React.createFactory React.createClass
     @downloadHTML()
     @downloadHTMLWrapped()
 
+  logoutWrapper: ->
+    active_users = @state.code.active_users || []
+    active_users = active_users[0...-1] if active_users.length > 0
+    @firebaseRefs
+      .code
+      .update(
+        created_at: (new Date()).toISOString()
+        active_users: active_users
+      , =>)
+    @props.logout()
+
+  changeRoomsWrapper: ->
+    active_users = @state.code.active_users || []
+    active_users = active_users[0...-1] if active_users.length > 0
+    @firebaseRefs
+      .code
+      .update(
+        created_at: (new Date()).toISOString()
+        active_users: active_users
+      , =>)
+    try
+      @unbind('code')
+    localStorage.setItem( "doc", "")
+    navigate "/#{btoa(JSON.stringify(@props.user))}", true
+
   componentWillMount: ->
     ref = @props
       .firebase
@@ -52,12 +79,14 @@ module.exports = React.createFactory React.createClass
       .child("documents/#{@props.authCode}")
     @bindAsObject(ref, "code")
     new_document = @state.code['.value']?
+    slim_user = @props.user
     if new_document
       @firebaseRefs
         .code
         .update(
           document: ""
           created_at: (new Date()).toISOString()
+          active_users: [@slimUser()]
           , =>)
 
   componentWillUnmount: ->
@@ -65,6 +94,7 @@ module.exports = React.createFactory React.createClass
       @unbind('code')
 
   render: ->
+    console.log @state.code.active_users
     code = @state.code.document
 
     div {},
@@ -79,9 +109,10 @@ module.exports = React.createFactory React.createClass
         downloadHTML: @downloadHTML
         downloadHTMLWrapped: @downloadHTMLWrapped
         authCode: @props.authCode
-        logout: @props.logout
+        logout: @logoutWrapper
         user: @props.user
-
+        changeRooms: @changeRoomsWrapper
+        active_users: @state.code.active_users
 
 
       div className: 'row',

@@ -1,4 +1,4 @@
-{div, input, label, h5, table, thead, tbody, tr, th, td, a}  = React.DOM
+{div, input, label, h5, table, thead, tbody, tr, th, td, a, img}  = React.DOM
 
 navigate = require('react-mini-router').navigate
 uuid = require('uuid-v4')
@@ -14,7 +14,7 @@ module.exports = React.createFactory React.createClass
     docCode: ""
     projects: []
 
-  componentWillMount: ->
+  componentDidMount: ->
     @userDocuments()
 
   userDocuments: ->
@@ -66,8 +66,10 @@ module.exports = React.createFactory React.createClass
         div className: "row",
           if !@state.newDocument
             div {},
-              h5 {},
-                "Please select a room or enter a room code you have been given"
+              div
+                className: "row",
+                h5 {},
+                  "Please select a room or enter a room code you have been given"
               div
                 className: "row",
                   table {},
@@ -77,26 +79,42 @@ module.exports = React.createFactory React.createClass
                           "Room Code"
                         th {},
                           "Date updated"
+                        th {},
+                          "Active users"
                     tbody {},
-                      _.map @state.projects, (project) =>
-                        tr key: project.key,
-                          td
-                            className: "white-text"
-                            style: cursor: "pointer"
-                            onClick: _.partial(navigate, "/#{project.key}/#{@state.user}"),
-                              "Room: #{project.key}"
-                          td {},
-                            moment(project.updated_at).fromNow()
+                      if @state.projects.length == 0
+                        tr {},
+                          td {}
+                          td {}
+                          td {}
+                      else
+                        _.map @state.projects, (project) =>
+                          tr key: project.key,
+                            td
+                              className: "white-text"
+                              style: cursor: "pointer"
+                              onClick: _.partial(navigate, "/#{project.key}/#{@state.user}"),
+                                "Room: #{project.key}"
+                            td {},
+                              moment(project.updated_at).fromNow()
+                            td {},
+                              _.map project.active_users, (user) ->
+                                img
+                                  key: user.uid
+                                  className: "circle responsive-img"
+                                  style:
+                                    width: '20px',
+                                  src: user.photo
+                                  alt: user.email
               div
                 className: "row",
                 div className: "input-field",
                   input
                     onKeyUp: @docCode
                     type: "text"
-                    id: "docCode"
-                  label
-                    htmlFor: "docCode",
-                      "Room code"
+                    placeholder: "room code"
+                    id: "roomCode",
+
           div className: "row",
             div className: "col s6",
               div

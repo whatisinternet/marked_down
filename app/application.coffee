@@ -14,7 +14,8 @@ module.exports = React.createFactory React.createClass
     loggedIn: !(localStorage.getItem("doc") == "")
 
   setLoginState: (state = @state.loggedIn) ->
-    @setState loggedIn: !state
+    try
+      @setState loggedIn: !state
 
   logout: ->
     localStorage.setItem("doc", "")

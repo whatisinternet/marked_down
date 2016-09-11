@@ -14,6 +14,8 @@ git status
 npm run deploy
 
 rm -r ./assets
+rm -r ./app
+rm -r ./electron
 rm -r ./config
 rm -r ./node_modules
 rm -r ./bin

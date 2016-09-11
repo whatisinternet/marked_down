@@ -53,7 +53,7 @@ module.exports = React.createFactory React.createClass
 
   setup: (user) ->
     if @state.loggedIn
-      require('./components/login/index')
+      require('./components/setup/index')
         firebase: Firebase
         user: JSON.parse(atob(user))
         logout: @logout

@@ -13,7 +13,6 @@ module.exports = React.createFactory React.createClass
       docCode = localStorage.getItem( "doc" )
       if user
         @setState loggedIn: true
-        @props.setLoginState()
 
         if docCode? && docCode != ""
           navigate "/#{docCode}/#{btoa(JSON.stringify(user))}"

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm ./dist/*.eot
+rm ./dist/*.ttf
+rm ./dist/*.js*
+rm ./dist/*.woff*

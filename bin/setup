@@ -1,0 +1,8 @@
+#!/bin/sh
+
+npm install
+
+touch ./env.coffee
+echo 'module.exports =\n  apiKey: ""\n  databaseURL: "https://something-awesome.firebaseio.com/"\n  authDomain: "some-code.apps.googleusercontent.com"\n  storageBucket: ""' > ./env.coffee
+
+echo "Setup your env! [env.coffee]\n Then [npm run app]"

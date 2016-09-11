@@ -9,29 +9,51 @@ marked.setOptions(
 
 module.exports =
   updateCode: (updateable) ->
-    @setState code: updateable
-    localStorage.setItem("markedDownCode", updateable)
+    users = @state.code.users
+    if users?
+      @firebaseRefs
+        .code
+        .update(
+          document: updateable
+          users: _.uniq users.concat(@props.user.uid)
+          updated_at: (new Date()).toISOString()
+          created_at: @state.code.created_at || (new Date()).toISOString()
+          , =>)
+    else
+      @firebaseRefs
+        .code
+        .update(
+          document: updateable
+          users: [@props.user.uid]
+          updated_at: (new Date()).toISOString()
+          created_at: @state.code.created_at || (new Date()).toISOString()
+          , =>)
     @downloadCode()
     @downloadHTML()
     @downloadHTMLWrapped()
 
   downloadCode: ->
     targetElement = document.getElementById("dlCode")
-    file = new Blob([@state.code], type: "text/plain")
+    code = @state.code['.value']
+    file = new Blob([code], type: "text/plain")
     targetElement.href = URL.createObjectURL(file)
     targetElement.download = "#{@state.fileName}.md"
 
   downloadHTML: ->
     targetElement = document.getElementById("dlHTML")
-    file = new Blob([marked(@state.code)], type: "text/plain")
-    targetElement.href = URL.createObjectURL(file)
-    targetElement.download = "#{@state.fileName}.html"
+    code = @state.code['.value']
+    if code?
+      file = new Blob([marked(code)], type: "text/plain")
+      targetElement.href = URL.createObjectURL(file)
+      targetElement.download = "#{@state.fileName}.html"
 
   downloadHTMLWrapped: ->
     targetElement = document.getElementById("dlHTMLWrapped")
-    file = new Blob([@wrapHtml(marked(@state.code), @state.fileName)], type: "text/plain")
-    targetElement.href = URL.createObjectURL(file)
-    targetElement.download = "#{@state.fileName}.html"
+    code = @state.code['.value']
+    if code?
+      file = new Blob([@wrapHtml(marked(code), @state.fileName)], type: "text/plain")
+      targetElement.href = URL.createObjectURL(file)
+      targetElement.download = "#{@state.fileName}.html"
 
   openAttachment: ->
     fileInput = document.getElementById('openable-file')
@@ -46,10 +68,16 @@ module.exports =
     fr.onload = (e) =>
       console.log f.name, e.target.result
       fileName =  f.name.split('.')
-      localStorage.setItem("markedDownCode", e.target.result)
       localStorage.setItem("markedDownFileName", fileName[0])
+      result = e.target.result
+      console.log result
+      @firebaseRefs
+        .code
+        .update(
+          document: e.target.result
+          updated_at: (new Date()).toISOString()
+          , =>)
       @setState {
-        code: e.target.result
         fileName: fileName[0]
       }
 

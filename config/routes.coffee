@@ -1,2 +1,4 @@
 module.exports =
-  '/': 'index'
+  '/': 'login'
+  '/:authCode/:user': 'main'
+  '/:user': 'setup'

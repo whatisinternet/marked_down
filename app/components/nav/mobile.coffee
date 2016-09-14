@@ -33,12 +33,13 @@ module.exports = React.createFactory React.createClass
             id: "nav-mobile"
             className: "right",
               li {},
-                "Your room code is: #{@props.authCode}"
-              li {},
                 a
                   className: 'dropdown-button'
                   'data-activates': "user-dropdown",
-                    img
-                      className: "circle responsive-img"
-                      style: width: '30px', paddingTop: '15px'
-                      src: @props.user.photoURL
+                    div style: display: "inline-block",
+                      "Your room code is: #{@props.authCode}"
+                    div style: display: "inline-block",
+                      img
+                        className: "circle responsive-img"
+                        style: width: '30px', paddingTop: '15px'
+                        src: @props.user.photoURL

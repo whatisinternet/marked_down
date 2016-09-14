@@ -20,7 +20,7 @@ module.exports = React.createFactory React.createClass
         li {},
           a
             onClick: @props.changeRooms,
-              "change Rooms"
+              "Change Rooms"
         li {},
           a
             onClick: @props.logout,

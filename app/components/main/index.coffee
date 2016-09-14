@@ -94,7 +94,6 @@ module.exports = React.createFactory React.createClass
       @unbind('code')
 
   render: ->
-    console.log @state.code.active_users
     code = @state.code.document
 
     div {},

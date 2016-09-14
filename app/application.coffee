@@ -11,7 +11,7 @@ module.exports = React.createFactory React.createClass
   displayName: "App"
 
   getInitialState: ->
-    loggedIn: !(localStorage.getItem("doc") == "")
+    loggedIn: false
 
   setLoginState: (state = @state.loggedIn) ->
     try

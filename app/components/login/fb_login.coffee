@@ -6,9 +6,10 @@ module.exports = React.createFactory React.createClass
   displayName: "fb::login"
 
   getInitialState: ->
-    loggedIn: @props.loggedIn
+    loggedIn: !!@props.loggedIn
 
   componentWillMount: ->
+    console.log @props.loggedIn
     firebase.auth().onAuthStateChanged((user) =>
       docCode = localStorage.getItem( "doc" )
       if user

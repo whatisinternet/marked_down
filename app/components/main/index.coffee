@@ -6,7 +6,7 @@ navigate = require('react-mini-router').navigate
 Keys = require('../../mixins/keys.coffee')
 Code = require('./code.coffee')
 Display = require('./display.coffee')
-Nav = require('../nav/index.coffee')
+RightNav = require('../right-nav/index.coffee')
 
 CodeMixin = require('../../mixins/code-mixin.coffee')
 FullScreenMixin = require('../../mixins/fullscreen-mixin.coffee')
@@ -34,6 +34,7 @@ module.exports = React.createFactory React.createClass
     leftClass: "s12 l6"
     rightClass: "s12 l6"
     users: []
+    rightNav: false
 
   componentDidUpdate: ->
     @downloadCode()
@@ -93,34 +94,63 @@ module.exports = React.createFactory React.createClass
     try
       @unbind('code')
 
+  showHideNav: ->
+    @setState rightNav: !@state.rightNav
+
   render: ->
     code = @state.code.document
 
     div {},
-      Nav
-        fileSelected: @fileSelected
-        vim: @vim
-        emacs: @emacs
-        sublime: @sublime
-        openAttachment: @openAttachment
-        toggleFullScreen: @toggleFullScreen
-        downloadCode: @downloadCode
-        downloadHTML: @downloadHTML
-        downloadHTMLWrapped: @downloadHTMLWrapped
-        authCode: @props.authCode
-        logout: @logoutWrapper
-        user: @props.user
-        changeRooms: @changeRoomsWrapper
-        active_users: @state.code.active_users
-
-
+      div
+        style:
+          position: "fixed"
+          top: "20px"
+          right: "20px"
+          zIndex: 9999
+        onClick: @showHideNav
+        className: "btn-floating black",
+          i className: "material-icons",
+            "menu"
       div className: 'row',
-        Code
-          code: code || ""
-          updateCode: @updateCode
-          leftClass: @state.leftClass
-          keyBinding: @state.keyBinding
+        if @state.rightNav
+          div className: 'col s12 m8 l10',
+            div className: 'row',
+              Code
+                code: code || ""
+                updateCode: @updateCode
+                leftClass: @state.leftClass
+                keyBinding: @state.keyBinding
 
-        Display
-          rightClass: @state.rightClass
-          code: code || ""
+              Display
+                rightClass: @state.rightClass
+                code: code || ""
+        else
+          div className: 'col s12 m12 l12',
+            div className: 'row',
+              Code
+                code: code || ""
+                updateCode: @updateCode
+                leftClass: @state.leftClass
+                keyBinding: @state.keyBinding
+
+              Display
+                rightClass: @state.rightClass
+                code: code || ""
+
+        if @state.rightNav
+          RightNav
+            fileSelected: @fileSelected
+            vim: @vim
+            emacs: @emacs
+            kublime: @sublime
+            openAttachment: @openAttachment
+            toggleFullScreen: @toggleFullScreen
+            downloadCode: @downloadCode
+            downloadHTML: @downloadHTML
+            downloadHTMLWrapped: @downloadHTMLWrapped
+            authCode: @props.authCode
+            logout: @logoutWrapper
+            user: @props.user
+            changeRooms: @changeRoomsWrapper
+            active_users: @state.code.active_users
+

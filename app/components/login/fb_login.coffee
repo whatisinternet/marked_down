@@ -1,4 +1,4 @@
-{div, input, label, h1, p}  = React.DOM
+{div, input, label, h4, p}  = React.DOM
 
 navigate = require('react-mini-router').navigate
 
@@ -57,12 +57,12 @@ module.exports = React.createFactory React.createClass
           justifyContent: "flex-end"
           height: "80vh"
         }
-        h1
+        h4
           className: "white-text"
           style: {
             marginBottom: "0em"
           },
-          "MarkedDown"
+          "# MarkedDown"
         p
           className: "grey-text text-lighten-3",
           "A live preview Markdown editor with firebase"
@@ -76,7 +76,7 @@ module.exports = React.createFactory React.createClass
         div
           className: "row center-align white-text"
           style: {
-            marginTop: "5em"
+            marginTop: "2em"
           },
           div className: "white-text",
             div

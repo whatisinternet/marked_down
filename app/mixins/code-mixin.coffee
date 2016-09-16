@@ -25,26 +25,29 @@ module.exports =
 
   downloadCode: ->
     targetElement = document.getElementById("dlCode")
-    code = @state.code['.value']
-    file = new Blob([code], type: "text/plain")
-    targetElement.href = URL.createObjectURL(file)
-    targetElement.download = "#{@state.fileName}.md"
+    if targetElement?
+      code = @state.code?.document
+      file = new Blob([code], type: "text/plain")
+      targetElement.href = URL.createObjectURL(file)
+      targetElement.download = "#{@state.fileName}.md"
 
   downloadHTML: ->
     targetElement = document.getElementById("dlHTML")
-    code = @state.code['.value']
-    if code?
-      file = new Blob([marked(code)], type: "text/plain")
-      targetElement.href = URL.createObjectURL(file)
-      targetElement.download = "#{@state.fileName}.html"
+    if targetElement?
+      code = @state.code?.document
+      if code?
+        file = new Blob([marked(code)], type: "text/plain")
+        targetElement.href = URL.createObjectURL(file)
+        targetElement.download = "#{@state.fileName}.html"
 
   downloadHTMLWrapped: ->
     targetElement = document.getElementById("dlHTMLWrapped")
-    code = @state.code['.value']
-    if code?
-      file = new Blob([@wrapHtml(marked(code), @state.fileName)], type: "text/plain")
-      targetElement.href = URL.createObjectURL(file)
-      targetElement.download = "#{@state.fileName}.html"
+    if targetElement?
+      code = @state.code?.document
+      if code?
+        file = new Blob([@wrapHtml(marked(code), @state.fileName)], type: "text/plain")
+        targetElement.href = URL.createObjectURL(file)
+        targetElement.download = "#{@state.fileName}.html"
 
   openAttachment: ->
     fileInput = document.getElementById('openable-file')

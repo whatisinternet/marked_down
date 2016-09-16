@@ -1,4 +1,4 @@
-{div, input, label, h1}  = React.DOM
+{div, input, label, h1, p}  = React.DOM
 
 navigate = require('react-mini-router').navigate
 
@@ -47,25 +47,47 @@ module.exports = React.createFactory React.createClass
       @props.setLoginState()
 
   render: ->
-    div
-      className: "grey darken-4"
-      style:
-        display: "flex"
-        flexDirection: "column"
-        alignItems: "center"
-        justifyContent: "center"
-        height: "100vh",
-      div className: "row center-align white-text",
-        div className: "white-text",
-          div
-            className: "row center-align",
-              if @state.loggedIn
-                div
-                  onClick: @logout
-                  className: 'btn',
-                  "Logout"
-              else
-                div
-                  onClick: @login
-                  className: 'btn red accent-2',
-                  "Login with google"
+    div className: "grey darken-4",
+      div
+        className: "red darken-2 z-depth-4 hoverable"
+        style: {
+          display: "flex"
+          flexDirection: "column"
+          alignItems: "center"
+          justifyContent: "flex-end"
+          height: "80vh"
+        }
+        h1
+          className: "white-text"
+          style: {
+            marginBottom: "0em"
+          },
+          "MarkedDown"
+        p
+          className: "grey-text text-lighten-3",
+          "A live preview Markdown editor with firebase"
+      div
+        style:
+          display: "flex"
+          flexDirection: "column"
+          alignItems: "center"
+          justifyContent: "flex-start"
+          height: "20vh",
+        div
+          className: "row center-align white-text"
+          style: {
+            marginTop: "5em"
+          },
+          div className: "white-text",
+            div
+              className: "row center-align",
+                if @state.loggedIn
+                  div
+                    onClick: @logout
+                    className: 'btn',
+                    "Logout"
+                else
+                  div
+                    onClick: @login
+                    className: 'btn red darken-2',
+                    "Login with google"

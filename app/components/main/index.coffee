@@ -7,6 +7,7 @@ Keys = require('../../mixins/keys.coffee')
 Code = require('./code.coffee')
 Display = require('./display.coffee')
 RightNav = require('../right-nav/index.coffee')
+Users = require('../info/users.coffee')
 
 CodeMixin = require('../../mixins/code-mixin.coffee')
 FullScreenMixin = require('../../mixins/fullscreen-mixin.coffee')
@@ -34,7 +35,7 @@ module.exports = React.createFactory React.createClass
     leftClass: "s12 l6"
     rightClass: "s12 l6"
     users: []
-    rightNav: false
+    rightNav: true
 
   componentDidUpdate: ->
     @downloadCode()
@@ -101,11 +102,13 @@ module.exports = React.createFactory React.createClass
     code = @state.code.document
 
     div {},
+      Users
+        active_users: @state.code.active_users
       div
         style:
           position: "fixed"
-          top: "20px"
-          right: "20px"
+          top: "10px"
+          right: "10px"
           zIndex: 9999
         onClick: @showHideNav
         className: "btn-floating black",
@@ -113,7 +116,9 @@ module.exports = React.createFactory React.createClass
             "menu"
       div className: 'row',
         if @state.rightNav
-          div className: 'col s12 m8 l10',
+          div
+            style: margin: 0, padding: 0
+            className: 'col s12 m8 l10',
             div className: 'row',
               Code
                 code: code || ""
@@ -136,7 +141,6 @@ module.exports = React.createFactory React.createClass
               Display
                 rightClass: @state.rightClass
                 code: code || ""
-
         if @state.rightNav
           RightNav
             fileSelected: @fileSelected
@@ -153,4 +157,5 @@ module.exports = React.createFactory React.createClass
             user: @props.user
             changeRooms: @changeRoomsWrapper
             active_users: @state.code.active_users
+
 

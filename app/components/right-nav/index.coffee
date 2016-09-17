@@ -4,67 +4,76 @@ module.exports = React.createFactory React.createClass
   displayName: "right-navigation"
 
   render: ->
-    div className: "col s12 m4 l2",
+    bem = new Bemmer(block: "nav")
+
+    div
+      style: height: "100vh"
+      className: "col s12 m4 l2 grey darken-3 white-text",
       input
         type: 'file'
         id: 'openable-file'
         style: {display: 'none'}
         onChange: _.bind(@props.fileSelected, @),
-      div className: 'card-panel blue-grey lighten-4 hoverable',
+      div {},
         ul {},
-          li {},
-            img
-              style: width: '30px'
-              className: "circle responsive-img",
-              src: @props.user.photoURL
-          li {},
+          li className: bem.with(element: "list-item"),
+            ""
+          li className: bem.with(element: "list-item"),
+            ""
+          li className: bem.with(element: "list-item"),
             "Your room code is: #{@props.authCode}"
-          hr {}
-          li {},
+          hr className: bem.with(element: "seperator")
+          li className: bem.with(element: "list-item"),
             a
-              style: cursor: "pointer"
+              className: bem.with(element: "link")
               onClick: @props.openAttachment,
                 "Open file"
-          hr {}
-          li {},
-            a id: 'dlCode',
-              "Export Markdown"
-          li {},
-            a id: 'dlHTML',
-              "Export Body HTML"
-          li {},
-            a id: 'dlHTMLWrapped',
-              "ExportWrapped HTML"
-          hr {}
-          li {},
+          hr className: bem.with(element: "seperator")
+          li className: bem.with(element: "list-item"),
             a
-              style: cursor: "pointer"
+              className: bem.with(element: "link")
+              id: 'dlCode',
+              "Export Markdown"
+          li className: bem.with(element: "list-item"),
+            a
+              className: bem.with(element: "link")
+              id: 'dlHTML',
+                "Export Body HTML"
+          li className: bem.with(element: "list-item"),
+            a
+              className: bem.with(element: "link")
+              id: 'dlHTMLWrapped',
+                "Export Wrapped HTML"
+          hr className: bem.with(element: "seperator")
+          li className: bem.with(element: "list-item"),
+            a
+              className: bem.with(element: "link")
               onClick: @props.vim,
                 "Vim keybindings"
-          li {},
+          li className: bem.with(element: "list-item"),
             a
-              style: cursor: "pointer"
+              className: bem.with(element: "link")
               onClick: @props.emacs,
                 "eMacs keybindings"
-          li {},
+          li className: bem.with(element: "list-item"),
             a
-              style: cursor: "pointer"
+              className: bem.with(element: "link")
               onClick: @props.sublime,
                 "Sublime keybindings (Normal)"
-          hr {}
-          li {},
+          hr className: bem.with(element: "seperator")
+          li className: bem.with(element: "list-item"),
             a
-              style: cursor: "pointer"
+              className: bem.with(element: "link")
               onClick: @props.toggleFullScreen,
                 "FullScreen"
-          hr {}
-          li {},
+          hr className: bem.with(element: "seperator")
+          li className: bem.with(element: "list-item"),
             a
-              style: cursor: "pointer"
+              className: bem.with(element: "link")
               onClick: @props.changeRooms,
                 "Change Rooms"
-          li {},
+          li className: bem.with(element: "list-item"),
             a
-              style: cursor: "pointer"
+              className: bem.with(element: "link")
               onClick: @props.logout,
                 "Logout"

@@ -27,7 +27,7 @@ module.exports = React.createFactory React.createClass
       autofocus: true
 
     div className: "col #{@props.leftClass}",
-      div className: 'card-panel blue-grey darken-4 hoverable',
+      div className: 'blue-grey darken-4',
         CodeMirror
           ref: "editor"
           value: @props.code

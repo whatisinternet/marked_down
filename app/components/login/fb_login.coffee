@@ -9,8 +9,7 @@ module.exports = React.createFactory React.createClass
     loggedIn: !!@props.loggedIn
 
   componentWillMount: ->
-    console.log @props.loggedIn
-    firebase.auth().onAuthStateChanged((user) =>
+    @props.firebase.auth().onAuthStateChanged((user) =>
       docCode = localStorage.getItem( "doc" )
       if user
         @setState loggedIn: true

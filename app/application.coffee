@@ -18,7 +18,7 @@ module.exports = React.createFactory React.createClass
       @setState loggedIn: !state
 
   componentWillMount: ->
-    firebase.auth().onAuthStateChanged((user) =>
+    Firebase.auth().onAuthStateChanged((user) =>
       docCode = localStorage.getItem( "doc" )
       if user
         @setState loggedIn: true

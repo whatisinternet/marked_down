@@ -19,6 +19,7 @@ module.exports = React.createFactory React.createClass
     docCode: ""
     projects: []
     document: ""
+    canOpen: false
 
   previewDocument: (docCode) ->
     project = _.find @state.projects, key: docCode
@@ -26,6 +27,16 @@ module.exports = React.createFactory React.createClass
       @setState document: project.document
     else
       @setState document: ""
+
+  isValidDocument: (docCode) ->
+    !!_.find @state.projects, key: docCode
+
+  updateRoomCode: (e) ->
+    @docCode(e)
+    if @isValidDocument(@state.docCode)
+      @setState canOpen: true
+    else
+      @setState canOpen: false
 
   componentDidMount: ->
     @userDocuments()
@@ -58,17 +69,19 @@ module.exports = React.createFactory React.createClass
                   className: "row",
                   div className: "input-field",
                     input
-                      onKeyUp: @docCode
+                      onKeyUp: @updateRoomCode
+                      onKeyDown: @updateRoomCode
                       type: "text"
                       placeholder: "room code"
                       id: "roomCode",
                 div className: "row",
                   div className: "col s6",
-                    div
-                      onClick: _.partial navigate, "/#{@state.docCode}/#{@state.user}"
-                      style: if @state.newDocument || !@state.documentEnabled then {display: "none"} else {display: ""}
-                      className: "btn-flat yellow accent-2",
-                        "Open"
+                    if @state.canOpen
+                      div
+                        onClick: _.partial navigate, "/#{@state.docCode}/#{@state.user}"
+                        style: if @state.newDocument || !@state.documentEnabled then {display: "none"} else {display: ""}
+                        className: "btn-flat yellow accent-2",
+                          "Open"
                   div className: "col s6",
                     div
                       onClick: _.partial @existingDocument
